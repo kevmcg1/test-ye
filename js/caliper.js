@@ -319,11 +319,12 @@ beam.add(screw(8.62, -0.06, BT + 0.03, 0.035));
     g.fillRect(bx(x) - w / 2 * S, by(-0.103 + up), w * S, (0.187 + up) * S);
     g.textAlign = 'right'; g.textBaseline = 'alphabetic';
     g.font = major ? `700 ${0.125 * S}px Arial, Helvetica, sans-serif` : `600 ${0.092 * S}px Arial, Helvetica, sans-serif`;
-    g.fillText(major ? String(i / 10) : String(i % 10), bx(x) - 0.016 * S, by(major ? -0.258 : -0.248));
+    // the inch numbers sit on top of the line the lines hang from; the 0.100″ digits sit below it
+    g.fillText(major ? String(i / 10) : String(i % 10), bx(x) - 0.016 * S, by(major ? -0.103 + 0.02 : -0.248));
   }
   g.textAlign = 'left';
   g.font = `italic 600 ${0.1 * S}px Arial, Helvetica, sans-serif`;
-  g.fillText('in', bx(6.035), by(-0.248));
+  g.fillText('in', bx(6.035), by(-0.103 + 0.02));
   g.font = `${0.058 * S}px Arial, Helvetica, sans-serif`;
   if ('letterSpacing' in g) g.letterSpacing = `${0.012 * S}px`;
   g.fillText('STAINLESS   HARDENED', bx(6.95), by(-0.035));
@@ -854,7 +855,7 @@ function placeTag(t, p, nrm, off, placed){
   const ax = dx < -0.35 ? -1 : dx > 0.35 ? 0 : -0.5;
   const ay = dy < -0.35 ? -1 : dy > 0.35 ? 0 : -0.5;
   // labels are nowrap, so their size only changes with their text — measure then, not every frame
-  const txt = t.b.textContent + ' ' + t.sm.textContent;
+  const txt = t.b.textContent + ' ' + t.sm.textContent;
   if (!t.bw || t.txt !== txt || t.vw !== innerWidth) { t.bw = t.box.offsetWidth; t.bh = t.box.offsetHeight; t.txt = txt; t.vw = innerWidth; }   // again if it was first sized while hidden, or the window changed
   // keep the whole label inside the view instead of letting it run off the edge
   const m = 6, bw = t.bw, bh = t.bh, loY = m, hiY = Math.max(m, r.height - bh - m);
