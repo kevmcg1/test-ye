@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Shop Tool Sim</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/shell.css">
+</head>
+<body>
+<header class="site-head" role="banner"><a href="https://kevmcg1.github.io/portfolio.html" target="_top" aria-label="Back to the portfolio at kevmcg1.github.io">KEVMCG1.GITHUB.IO</a></header>
+<header class="bar">
+  <div class="brand" aria-hidden="true"><i>[</i> SHOP TOOL SIM <i>]</i></div>
+  <nav class="tabs" role="tablist" aria-label="Instruments" id="tabs"></nav>
+</header>
+<main class="stage" id="stage"></main>
+<footer class="foot"><span>Shop Tool Sim is released under GitHub’s <a href="https://github.com/github/choosealicense.com/blob/gh-pages/_licenses/cc0-1.0.txt" target="_blank" rel="license noopener noreferrer">Creative Commons Zero v1.0 Universal</a> license. All rights reserved.</span></footer>
+<!-- each tool's page; its styles are in css/ and its code in js/ -->
+<script type="text/html" id="tool-caliper">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dial Caliper Trainer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/caliper.css">
+</head>
+<body>
+<div class="app">
+  <aside id="panel">
+    <header class="logo">
+      <h1 class="logo-mark" id="logoMark" aria-label="Dial caliper">
+        <span class="logo-brk" aria-hidden="true">[</span>
+        <span class="logo-stack" aria-hidden="true"><span class="logo-top" id="logoTop">Dial</span><span class="logo-bot">Caliper</span></span>
+        <span class="logo-brk" aria-hidden="true">]</span>
+      </h1>
+      <div class="logo-rule" aria-hidden="true"></div>
+      <div class="logo-foot"><span class="logo-range">0–6″ · .001″</span><button id="tutBtn">Tutorial</button></div>
+    </header>
+
+    <section>
+      <h2>Slider</h2>
+      <input type="range" id="slider" min="0" max="6300" step="1" aria-label="Jaw opening">
+      <button class="tgl" id="fineBtn" aria-pressed="false" data-tip="Fine adjust&#10;Slows the slider, thumb wheel, bezel and arrow keys down about 10× so the needle creeps instead of jumping."><i class="fa-solid fa-feather-pointed"></i><span>Fine adjust</span><em>off</em></button>
+      <p class="note fine-note" id="fineWin"></p>
+      <div class="units" role="group" aria-label="Units"><button type="button" data-units="in" aria-pressed="true">Inches</button><button type="button" data-units="mm" aria-pressed="false">Millimeters</button></div>
+      <div class="grid3">
+        <button data-step="-0.1">−.100</button>
+        <button data-step="-0.01">−.010</button>
+        <button data-step="-0.001">−.001</button>
+        <button data-step="0.1">+.100</button>
+        <button data-step="0.01">+.010</button>
+        <button data-step="0.001">+.001</button>
+      </div>
+      <div class="row">
+        <button id="closeBtn">Close jaws</button>
+        <button id="openBtn">Open fully</button>
+      </div>
+      <div class="row">
+        <button id="lockBtn" aria-pressed="false">Lock slider</button>
+        <button id="bezelLockBtn" aria-pressed="false" data-inst="dial">Lock bezel</button>
+      </div>
+    </section>
+
+    <section data-inst="dial">
+      <h2>Dial bezel</h2>
+      <div class="bezel-val"><span>Bezel offset</span><b id="bezelVal">0.000″</b></div>
+      <input type="range" id="bezelRange" min="-50" max="50" step="1" value="0" aria-label="Bezel offset in thousandths">
+      <div class="row">
+        <button id="zeroBtn">Zero bezel</button>
+        <button id="skewBtn">Random offset</button>
+      </div>
+      <button id="bezelResetBtn" class="bezel-reset" data-tip="Reset bezel&#10;Turns the bezel back to zero, even while it is locked."><i class="fa-solid fa-rotate-left"></i> Reset bezel</button>
+      <p class="note" style="margin:8px 0 0">Close the jaws before measuring. If the needle isn't on 0, turn the bezel until it is, then lock it.</p>
+    </section>
+
+    <section class="sample-sec">
+      <h2>Part</h2>
+      <select id="sampleSel" aria-label="Part to measure">
+        <option value="none">No part</option>
+        <optgroup label="Outside jaws">
+          <option value="pin">Gauge pin</option>
+          <option value="hex">Hex bar</option>
+          <option value="block">Gauge block</option>
+          <option value="ball">Steel ball</option>
+          <option value="tube">Aluminum tube</option>
+        </optgroup>
+        <optgroup label="Inside jaws">
+          <option value="ring">Ring gauge</option>
+          <option value="bearing">Ball bearing</option>
+          <option value="slot">Slotted block</option>
+          <option value="coupling">Brass coupling</option>
+        </optgroup>
+        <optgroup label="Depth rod">
+          <option value="pocket">Pocket block</option>
+          <option value="hole">Round boss</option>
+          <option value="shoulder">Shouldered block</option>
+          <option value="channel">Channel block</option>
+        </optgroup>
+      </select>
+      <div class="row">
+        <button id="newVals">New random size</button>
+        <button id="revealBtn">Show actual</button>
+      </div>
+      <div id="feats"></div>
+    </section>
+
+    <section class="answer">
+      <h2>Highlights</h2>
+      <div class="hlcards">
+        <label class="hlcard" style="--c:var(--hl-inch)"><input type="checkbox" data-hl="inch"><span><b>Inch number</b><small>Last whole inch the slider edge has passed</small></span></label>
+        <label class="hlcard" style="--c:var(--hl-tenth)"><input type="checkbox" data-hl="tenth"><span><b>Tenth line</b><small data-inst="dial">Last 0.100″ line left of the slider edge</small><small data-inst="vern">Last beam digit (0.100″) left of the vernier zero</small></span></label>
+        <label class="hlcard" style="--c:var(--hl-dial)" data-inst="dial"><input type="checkbox" data-hl="dial"><span><b>Dial reading</b><small>The dial mark under the needle, in thousandths</small></span></label>
+        <label class="hlcard" style="--c:var(--hl-sub)" data-inst="vern"><input type="checkbox" data-hl="sub"><span><b>0.025″ lines</b><small>Short beam lines passed after that digit</small></span></label>
+        <label class="hlcard" style="--c:var(--hl-vern)" data-inst="vern"><input type="checkbox" data-hl="vern"><span><b>Vernier line</b><small>The vernier line that meets a beam line, in thousandths</small></span></label>
+        <label class="hlcard" style="--c:#c9ced4"><input type="checkbox" data-hl="outline"><span><b>Part outline</b><small>Colored outline around the part being measured</small></span></label>
+      </div>
+    </section>
+
+    <section>
+      <h2>Graphics</h2>
+      <select id="gfxSel" aria-label="Graphics quality">
+        <option value="high" selected>High</option>
+        <option value="medium">Balanced</option>
+        <option value="low">Low</option>
+      </select>
+      <p class="note" id="gfxInfo" style="margin:8px 0 0">Resolution adapts automatically to hold 60 fps.</p>
+      <label class="chk" style="margin:12px 0 0"><input type="checkbox" id="realChk"> Realistic metal finish</label>
+      <p class="note" style="margin:6px 0 0">Adds real turning and grinding marks. Off keeps the markings clear and easy to read.</p>
+    </section>
+
+    <section class="help">
+      <h2>Reading the caliper</h2>
+      <div data-inst="dial">
+        <p><b>Beam numbers</b> are whole inches. Each <b>line</b> between them is 0.100″. Read the last line to the left of the slider edge.</p>
+        <p><b>The dial</b> adds thousandths: each mark is 0.001″ and one full turn of the needle is 0.100″.</p>
+        <p><b>Reading</b> = inches + tenths + dial. For example 1″ + 0.300″ + 0.047″ = 1.347″.</p>
+        <p><b>Mouse:</b> drag the slider, dial or thumb wheel to move the jaws, scroll over the thumb wheel for 0.001″ steps, drag the knurled bezel to turn the dial face, and click a lock screw to lock it. Shift for fine control.</p>
+      </div>
+      <div data-inst="vern">
+        <p><b>Beam numbers</b> are whole inches and the <b>small digits</b> are 0.100″. The <b>short lines</b> between digits are 0.025″ each. Read them all at the vernier's 0 line.</p>
+        <p><b>The vernier</b> adds thousandths: find the one vernier line that meets a beam line exactly. Its number is the thousandths, 0 to 24.</p>
+        <p><b>Reading</b> = inches + tenths + 0.025″ lines + vernier. For example 1″ + 0.300″ + 0.050″ + 0.012″ = 1.362″.</p>
+        <p><b>Mouse:</b> drag the slider or thumb wheel to move the jaws, scroll over the thumb wheel for 0.001″ steps, and click the lock screw to lock it. Shift for fine control.</p>
+      </div>
+      <p><b>Fine adjust</b> slows every control down about 10×: the slider covers a 0.100″ window, the wheel steps 0.0001″, and the needle creeps between marks instead of jumping.</p>
+      <p><b>Keys:</b> ←→ 0.001″ (0.0001″ in fine adjust), Shift+←→ 0.010″, PgUp/PgDn 0.100″, F fine adjust, L lock slider, <span data-inst="dial">B lock bezel, Z zero bezel, </span>A auto measure, Esc dismiss.</p>
+    </section>
+  </aside>
+
+  <main>
+    <div id="view">
+      <div class="loading" id="loading"><div class="ld"><span class="ld-t" id="ldT">Loading the 3D engine…</span><div class="ld-bar" role="progressbar" aria-label="Loading" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i id="ldFill"></i></div><span class="ld-p" id="ldP">0%</span></div></div>
+      <script src="js/loading.js"><\/script>
+      <div class="actions">
+        <button class="ib" id="sideBtn" aria-pressed="false" aria-label="Hide the side panel" data-tip="Hide the side panel&#10;Gives the 3D view the whole width."><i class="fa-solid fa-angles-left ic-off"></i><i class="fa-solid fa-angles-right ic-on"></i></button>
+        <button class="ib" id="autoBtn" aria-label="Auto measure" data-tip="Auto measure&#10;Opens the jaws, then closes them gently on the part."><i class="fa-solid fa-wand-magic-sparkles"></i></button>
+        <button class="pbtn" id="examBtn" data-tip="Examination&#10;Cinematic tour with labels on every part. Rotate, pan and zoom freely."><i class="fa-solid fa-binoculars"></i><span>Examine</span></button>
+        <button class="pbtn" id="practiceBtn" aria-pressed="false" data-tip="Practice reading&#10;Hides the answers, picks a random part and size, and puts an answer box in the reading bar."><i class="fa-solid fa-graduation-cap"></i><span>Practice</span></button>
+        <button class="ib" id="pullBtn" aria-label="Remove part" data-tip="Remove part&#10;Takes the part off the caliper."><i class="fa-solid fa-arrow-right-from-bracket"></i></button>
+      </div>
+      <div class="views" role="group" aria-label="Camera views">
+        <button class="ib" data-view="iso" aria-label="Iso view" data-tip="Iso view&#10;Angled overview of the whole caliper."><i class="fa-solid fa-cube"></i></button>
+        <button class="ib" data-view="front" aria-label="Front view" data-tip="Front view&#10;Straight-on view of the caliper."><i class="fa-solid fa-vector-square"></i></button>
+        <button class="ib" data-view="scale" aria-label="Scale view" data-tip="Scale view&#10;Close-up of the beam scale at the slider edge."><i class="fa-solid fa-ruler-horizontal"></i></button>
+        <button class="ib" data-view="dial" id="fineViewBtn" aria-label="Dial view" data-tip="Dial view&#10;Close-up of the dial and needle."><span class="ic-dial"><i class="fa-solid fa-gauge"></i></span><span class="ic-vern"><i class="fa-solid fa-ruler-combined"></i></span></button>
+        <button class="ib" data-view="jaws" aria-label="Jaws view" data-tip="Jaws view&#10;Close-up of the jaws or depth rod on the part."><i class="fa-solid fa-magnifying-glass-plus"></i></button>
+      </div>
+      <div class="xlayer" id="xlayer" aria-hidden="true"><svg id="xsvg"></svg></div>
+      <div class="cine top"><span class="ct">Examination</span><div class="cc">
+        <button class="pbtn" id="spinBtn" aria-pressed="true" aria-label="Auto-rotate"><i class="fa-solid fa-rotate"></i><span>Auto-rotate</span></button>
+        <button class="pbtn" id="labelsBtn" aria-pressed="true" aria-label="Labels"><i class="fa-solid fa-tags"></i><span>Labels</span></button>
+        <button class="pbtn" id="exitExam" aria-label="Exit examination"><i class="fa-solid fa-xmark"></i><span>Exit</span></button></div></div>
+      <div class="cine bot"><span class="hint"><span class="m-only">Left-drag to rotate · right-drag to pan · scroll to zoom</span><span class="t-only">Drag to rotate · two fingers to pan · pinch to zoom</span> · Esc to exit</span></div>
+      <div class="coach" aria-hidden="true"></div>
+      <div class="toast" id="toast" role="status" aria-live="polite"></div>
+      <div class="legend" aria-label="Mouse controls">
+        <span class="mk"><span class="mouse l" aria-hidden="true"><i class="fa-solid fa-computer-mouse"></i><b></b></span>Rotate</span>
+        <span class="mk"><span class="mouse r" aria-hidden="true"><i class="fa-solid fa-computer-mouse"></i><b></b></span>Pan</span>
+        <span class="mk"><span class="mouse m" aria-hidden="true"><i class="fa-solid fa-computer-mouse"></i><b></b></span>Zoom</span>
+      </div>
+      <div class="quick" role="group" aria-label="Slider controls">
+        <div class="hlbar" role="group" aria-label="Highlight colors"></div>
+        <button class="ib" id="panelBtn" aria-pressed="false" aria-label="Hide the reading panel" data-tip="Hide the reading panel&#10;Gives the 3D view the whole height."><i class="fa-solid fa-angles-down ic-off"></i><i class="fa-solid fa-angles-up ic-on"></i></button>
+        <button class="ib" id="closeQuick" aria-label="Close jaws" data-tip="Close jaws&#10;Closes the jaws, or until they touch the part."><i class="fa-solid fa-down-left-and-up-right-to-center"></i></button>
+        <button class="ib" id="openQuick" aria-label="Open fully" data-tip="Open fully&#10;Opens the jaws as far as they go."><i class="fa-solid fa-up-right-and-down-left-from-center"></i></button>
+        <button class="ib" id="lockQuick" aria-label="Lock slider" aria-pressed="false" data-tip="Lock slider&#10;Tightens the lock screw so the slider can’t move."><i class="fa-solid fa-lock-open ic-off"></i><i class="fa-solid fa-lock ic-on"></i></button>
+        <div class="goto" role="group" aria-label="Go to a reading"><input type="text" id="setTo" placeholder="Go to 1.234 in" inputmode="decimal" aria-label="Move slider to reading"><button class="ib" id="goBtn" aria-label="Go to that reading">Go</button></div>
+        <button class="ib" id="fineQuick" aria-label="Fine adjust" aria-pressed="false" data-tip="Fine adjust&#10;Slows the slider, thumb wheel, bezel and arrow keys down about 10× for hairline moves."><i class="fa-solid fa-feather-pointed"></i></button>
+      </div>
+      <div class="flat" id="flat">
+        <div class="flat-h"><span id="flatTitle">Beam &amp; dial, flat view</span><span class="flat-btns"><button class="ib sm" id="flatMaxBtn" aria-pressed="false" aria-label="Maximize flat view" data-tip="Maximize flat view&#10;Stretches it to the full height of the 3D view."><i class="fa-solid fa-expand ic-off"></i><i class="fa-solid fa-compress ic-on"></i></button><button class="ib sm" id="flatBtn" aria-label="Hide flat view" aria-expanded="true" data-tip="Hide flat view"><i class="fa-solid fa-eye-slash ic-on"></i><i class="fa-solid fa-eye ic-off"></i></button></span></div>
+        <div class="flat-units" role="group" aria-label="Flat view units" data-inst="vern"><button type="button" data-funits="in" aria-pressed="true">Inches</button><button type="button" data-funits="mm" aria-pressed="false">Metric</button></div>
+        <canvas id="flatCv" width="260" height="280" role="img" aria-label="Beam scale at the slider edge and the dial face"></canvas>
+      </div>
+    </div>
+
+    <div class="flat-dock" id="flatDock"></div>
+    <div class="split" id="split" role="separator" aria-orientation="horizontal" aria-label="Resize the reading panel" tabindex="0"><span></span></div>
+    <section class="reading" id="reading" aria-live="polite">
+      <div class="value">
+        <div class="answer"><span class="num" id="lcd">1.000</span><span class="unit">in</span><span class="mm" id="lcdmm"></span></div>
+        <div class="pract">
+          <div class="ptools" role="group" aria-label="Practice with">
+            <span class="pl">Practice with</span>
+            <button type="button" class="ptool" data-ptool="od" aria-pressed="true">Outside jaws</button>
+            <button type="button" class="ptool" data-ptool="id" aria-pressed="true">Inside jaws</button>
+            <button type="button" class="ptool" data-ptool="depth" aria-pressed="true">Depth rod</button>
+          </div>
+          <label class="pl" for="guess">Your reading</label>
+          <div class="prow">
+            <input type="text" id="guess" placeholder="0.000" inputmode="decimal" autocomplete="off" aria-describedby="feedback">
+            <button class="pgo" id="checkBtn"><i class="fa-solid fa-check"></i><span>Check</span></button>
+            <button class="pgo alt" id="randomBtn" data-tip="Next part&#10;Random part and size, using the tools picked above."><i class="fa-solid fa-shuffle"></i><span>Next</span></button>
+          </div>
+        </div>
+        <div class="status" id="status">Slider free</div>
+      </div>
+      <div class="bd">
+        <div class="cell feat" id="featCell"><span class="k" id="fK">Measuring</span><span class="v" id="fV">—</span><span class="h" id="fH"></span></div>
+        <div class="cell answer" data-c="inch"><span class="k">Inches</span><span class="v" id="vA"></span><span class="h" id="hA"></span></div>
+        <span class="op answer">+</span>
+        <div class="cell answer" data-c="tenth"><span class="k">Tenths</span><span class="v" id="vB"></span><span class="h" id="hB"></span></div>
+        <span class="op answer" data-inst="dial">+</span>
+        <div class="cell answer" data-c="dial" data-inst="dial"><span class="k">Dial</span><span class="v" id="vC"></span><span class="h" id="hC"></span></div>
+        <span class="op answer" data-inst="vern">+</span>
+        <div class="cell answer" data-c="sub" data-inst="vern"><span class="k">0.025″ lines</span><span class="v" id="vS"></span><span class="h" id="hS"></span></div>
+        <span class="op answer" data-inst="vern">+</span>
+        <div class="cell answer" data-c="vern" data-inst="vern"><span class="k">Vernier</span><span class="v" id="vV"></span><span class="h" id="hV"></span></div>
+        <span class="op answer">=</span>
+        <div class="cell total answer"><span class="k">Reading</span><span class="v" id="vT"></span><span class="h">inches</span></div>
+        <div class="cell answer" data-c="bezel" id="bezelCell" hidden><span class="k">Bezel error</span><span class="v" id="vD"></span><span class="h">zero the bezel</span></div>
+      </div>
+      <div class="meta answer">Actual jaw opening <b id="gap"></b></div>
+      <div class="pfb" id="feedback" role="status" aria-live="polite"></div>
+    </section>
+  </main>
+</div>
+
+<div class="tut" id="tut" role="dialog" aria-modal="true" aria-labelledby="tutTitle" hidden>
+  <div class="tut-card">
+    <h3 id="tutTitle">Welcome to the caliper!</h3>
+    <p data-inst="dial">This handy tool measures almost anything up to 6 inches: outsides, insides and depths. Never held one? Perfect. You’ll be reading it in a few minutes.</p>
+    <p data-inst="vern">No dial, no batteries, just two scales that line up. It reads inches along the bottom and millimeters along the top, and it’s easier than it looks.</p>
+    <p class="tut-mouse"><b>New to the mouse?</b> <b>Click</b> = press the left button once. <b>Drag</b> = hold it down, move, then let go. That’s all you need.</p>
+    <ol>
+      <li><b>Pick a part.</b> Choose one from “Part” on the left, then click the magic wand. The jaws close gently on it for you.</li>
+      <li data-inst="dial"><b>Read it.</b> The last big number you passed + the small lines after it (0.100″ each) + where the needle points (0.001″ each).</li>
+      <li data-inst="dial"><b>Needle not on 0 when closed?</b> Click “Reset bezel” on the left. It turns the dial back to zero, even when it’s locked.</li>
+      <li data-inst="vern"><b>Inches or metric?</b> Use the Inches / Metric toggle right above the flat view, or the one on the left. The colors and the flat view follow along.</li>
+      <li data-inst="vern"><b>Read inches (bottom).</b> Big number + small numbers after it (0.100″) + tiny lines after those (0.025″) + the sliding line that lines up perfectly (0.001″).</li>
+      <li data-inst="vern"><b>Read millimeters (top).</b> The last whole millimeter before the top sliding 0, plus the top line that lines up perfectly (0.05 mm each).</li>
+      <li><b>Turn on the colors.</b> The colored dots at the bottom left start off. Tap one and its piece of the reading lights up on the tool. Tap it again to hide it.</li>
+      <li><b>Jump to a size.</b> Type into the “Go to” box at the bottom left and press Go. Add “in” or “mm” (like “25.4 mm” or “1.5 in”) and it knows which you mean.</li>
+      <li><b>Zoom the flat view.</b> The box in the corner shows the scales flat. The expand button makes it full height; the eye hides it.</li>
+      <li><b>Clear or real?</b> Markings start on plain, easy-to-read metal. The gem button at the top right brings back the real machined finish.</li>
+      <li data-inst="dial"><b>Practice.</b> Click “Practice,” type what you read, then “Check.” Slip up? No stress. It shows exactly which step went wrong, and why.</li>
+      <li data-inst="vern"><b>Practice in either unit.</b> Click “Practice,” pick Inches or Metric, type what you read, then “Check.” It walks you through any step that slipped.</li>
+    </ol>
+    <div class="row"><button class="primary" id="tutClose">Let’s measure!</button></div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/js/all.min.js"><\/script>
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+} }
+<\/script>
+<script src="js/caliper.js"><\/script>
+<script src="js/color-dots.js"><\/script>
+<script src="js/dropdowns.js"><\/script>
+<script src="js/flat-units.js"><\/script>
+</body>
+</html>
+</script>
+<script type="text/html" id="tool-micrometer">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Vernier Micrometer · 3D</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/micrometer.css">
+</head>
+<body>
+<div class="app">
+  <aside id="panel">
+    <header class="logo">
+      <h1 class="logo-mark" aria-label="Outside micrometer">
+        <span class="logo-brk" aria-hidden="true">[</span>
+        <span class="logo-stack"><span class="logo-top">Outside</span><span class="logo-bot">Micrometer</span></span>
+        <span class="logo-brk" aria-hidden="true">]</span>
+      </h1>
+      <div class="logo-rule" aria-hidden="true"></div>
+      <div class="logo-foot"><span class="logo-range" id="brand">0–1″</span><button id="tutBtn">Tutorial</button></div>
+    </header>
+
+
+    <section>
+      <h2>Frame size</h2>
+      <div class="grid3" role="group" aria-label="Frame size">
+        <button data-range="0" aria-pressed="true">0–1″</button>
+        <button data-range="1" aria-pressed="false">1–2″</button>
+        <button data-range="2" aria-pressed="false">2–3″</button>
+        <button data-range="3" aria-pressed="false">3–4″</button>
+        <button data-range="4" aria-pressed="false">4–5″</button>
+        <button data-range="5" aria-pressed="false">5–6″</button>
+      </div>
+    </section>
+
+    <section>
+      <h2>Spindle</h2>
+      <button class="tgl" id="fineBtn" aria-pressed="false" data-tip="Fine adjust&#10;Slows the thimble, the ratchet and the arrow keys down about 10× so you can creep onto a line."><i class="fa-solid fa-feather-pointed"></i><span>Fine adjust</span><em>off</em></button>
+      <input type="range" id="slider" min="0" max="10000" step="1" aria-label="Spindle position">
+      <div class="units" role="group" aria-label="Units"><button type="button" data-units="in" aria-pressed="true">Inches</button><button type="button" data-units="mm" aria-pressed="false">Millimeters</button></div>
+      <div class="grid3">
+        <button data-step="-0.025">−.025</button>
+        <button data-step="-0.001">−.001</button>
+        <button data-step="-0.0001">−.0001</button>
+        <button data-step="0.025">+.025</button>
+        <button data-step="0.001">+.001</button>
+        <button data-step="0.0001">+.0001</button>
+      </div>
+      <div class="row">
+        <button id="closeBtn">Close to max</button>
+        <button id="openBtn">Open to max</button>
+      </div>
+      <div class="row">
+        <button id="ratchetBtn">Close with ratchet</button>
+        <button id="lockBtn" aria-pressed="false">Lock spindle</button>
+      </div>
+      <label class="chk" style="margin-top:10px"><input type="checkbox" id="coachChk" checked> Remind me to use the ratchet</label>
+    </section>
+
+    <section class="sample-sec">
+      <h2>Sample</h2>
+      <select id="sampleSel" aria-label="Sample to measure"></select>
+      <div class="row"><button id="newVals">New random values</button></div>
+      <p class="note" style="margin:8px 0 0">Click a feature to measure it, or drag the part through the micrometer yourself. The part slides against the anvil and the feature under the faces is detected. Sizes change every time, within ±0.0100″ of nominal.</p>
+      <div id="feats"></div>
+      <div class="row"><button id="revealBtn">Show actual</button></div>
+    </section>
+
+    <section class="answer">
+      <h2>Highlights</h2>
+      <div class="hlcards">
+        <label class="hlcard" style="--c:var(--hl-num)"><input type="checkbox" data-hl="num"><span><b>Sleeve number</b><small>Last number showing on the sleeve</small></span></label>
+        <label class="hlcard" style="--c:var(--hl-line)"><input type="checkbox" data-hl="line"><span><b>Sleeve line</b><small>Last line showing past that number</small></span></label>
+        <label class="hlcard" style="--c:var(--hl-thimble)"><input type="checkbox" data-hl="thimble"><span><b>Thimble line</b><small>The thimble line at the index line</small></span></label>
+        <label class="hlcard" style="--c:var(--hl-vernier)"><input type="checkbox" data-hl="vernier"><span><b>Vernier line</b><small>The vernier line and the thimble line it matches</small></span></label>
+        <label class="hlcard" style="--c:#c9ced4"><input type="checkbox" data-hl="outline"><span><b>Part outline</b><small>Colored outline around the feature being measured</small></span></label>
+      </div>
+    </section>
+
+    <section>
+      <h2>Settings</h2>
+      <label class="pl" for="gfxSel">Graphics</label>
+      <select id="gfxSel" aria-label="Graphics quality">
+        <option value="high" selected>High</option>
+        <option value="medium">Balanced</option>
+        <option value="low">Low</option>
+      </select>
+      <p class="note" id="gfxInfo" style="margin:8px 0 0">Resolution adapts automatically to hold 60 fps.</p>
+      <label class="chk" style="margin:12px 0 0"><input type="checkbox" id="soundChk"> Sound effects</label>
+      <label class="chk" style="margin:12px 0 0"><input type="checkbox" id="realChk"> Realistic metal finish</label>
+      <p class="note" style="margin:6px 0 0">Adds real turning and grinding marks. Off keeps the markings clear and easy to read.</p>
+      <p class="note" style="margin:4px 0 0">The ratchet clicks as it slips. Off by default.</p>
+    </section>
+
+    <section class="help">
+      <h2>Reading the scales</h2>
+      <p><b>Frame size</b> is the starting inch: a 2–3″ micrometer adds 2.0000″ to what the scales show.</p>
+      <p><b>Sleeve numbers</b> are tenths; each line between them adds 0.025″. <b>Thimble lines</b> add 0.001″ each; one turn is 0.025″.</p>
+      <p><b>Vernier lines</b> on top of the sleeve: the one that lines up with a thimble line gives the 0.0001″ digit.</p>
+      <p><b>Mouse:</b> drag the thimble or ratchet to turn, click the lock lever, drag the sample in and out. Shift for fine control.</p>
+      <p><b>Keys:</b> ↑↓ 0.001″, Shift+↑↓ 0.0001″, PgUp/PgDn 0.025″, R ratchet, L lock, A auto measure, Esc dismiss.</p>
+    </section>
+  </aside>
+
+  <main>
+    <div id="view">
+      <div class="loading" id="loading"><div class="ld"><span class="ld-t" id="ldT">Loading the 3D engine…</span><div class="ld-bar" role="progressbar" aria-label="Loading" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i id="ldFill"></i></div><span class="ld-p" id="ldP">0%</span></div></div>
+      <script src="js/loading.js"><\/script>
+      <div class="actions">
+        <button class="ib" id="sideBtn" aria-pressed="false" aria-label="Hide the side panel" data-tip="Hide the side panel&#10;Gives the 3D view the whole width."><i class="fa-solid fa-angles-left ic-off"></i><i class="fa-solid fa-angles-right ic-on"></i></button>
+        <button class="ib" id="autoBtn" aria-label="Auto measure" data-tip="Auto measure&#10;Slides the selected feature between the faces, then closes with the ratchet."><i class="fa-solid fa-wand-magic-sparkles"></i></button>
+        <button class="pbtn" id="examBtn" data-tip="Examination&#10;Cinematic tour with labels on every part. Rotate, pan and zoom freely."><i class="fa-solid fa-binoculars"></i><span>Examine</span></button>
+        <button class="pbtn" id="practiceBtn" aria-pressed="false" data-tip="Practice reading&#10;Hides the answers, picks a random frame size and part, and puts an answer box in the reading bar."><i class="fa-solid fa-graduation-cap"></i><span>Practice</span></button>
+        <button class="ib" id="pullBtn" aria-label="Slide out" data-tip="Slide out&#10;Moves the part back out from between the faces."><i class="fa-solid fa-arrow-right-from-bracket"></i></button>
+      </div>
+      <div class="views" role="group" aria-label="Camera views">
+        <button class="ib" data-view="iso" aria-label="Iso view" data-tip="Iso view&#10;Angled overview of the whole micrometer."><i class="fa-solid fa-cube"></i></button>
+        <button class="ib" data-view="front" aria-label="Front view" data-tip="Front view&#10;Straight-on view of the frame."><i class="fa-solid fa-vector-square"></i></button>
+        <button class="ib" data-view="scale" aria-label="Scale view" data-tip="Scale view&#10;Close-up of the sleeve numbers, lines and thimble."><i class="fa-solid fa-magnifying-glass-plus"></i></button>
+        <button class="ib" data-view="vernier" aria-label="Vernier view" data-tip="Vernier view&#10;Looks down on the vernier lines on top of the sleeve."><i class="fa-solid fa-ruler-horizontal"></i></button>
+      </div>
+      <div class="coach" role="alertdialog" aria-labelledby="coachTitle">
+        <h3 id="coachTitle">Use the ratchet stop</h3>
+        <p><span class="ln">The faces are about to touch. Turning the thimble here over-tightens and changes the reading.</span><span class="ln">Turn the highlighted ratchet at the end instead — it clicks when the <u>pressure is right</u>.</span></p>
+        <button class="primary" id="coachOk">Got it</button>
+      </div>
+      <div class="xlayer" id="xlayer" aria-hidden="true"><svg id="xsvg"></svg></div>
+      <div class="cine top"><span class="ct">Examination</span><div class="cc">
+        <button class="pbtn" id="spinBtn" aria-pressed="true"><i class="fa-solid fa-rotate"></i><span>Auto-rotate</span></button>
+        <button class="pbtn" id="labelsBtn" aria-pressed="true"><i class="fa-solid fa-tags"></i><span>Labels</span></button>
+        <button class="pbtn" id="exitExam"><i class="fa-solid fa-xmark"></i><span>Exit</span></button></div></div>
+      <div class="cine bot"><span class="hint">Left-drag to rotate · right-drag to pan · scroll to zoom · Esc to exit</span></div>
+      <div class="toast" id="toast" role="status" aria-live="polite"></div>
+      <div class="legend" aria-label="Mouse controls">
+        <span class="mk"><span class="mouse l" aria-hidden="true"><i class="fa-solid fa-computer-mouse"></i><b></b></span>Rotate</span>
+        <span class="mk"><span class="mouse r" aria-hidden="true"><i class="fa-solid fa-computer-mouse"></i><b></b></span>Pan</span>
+        <span class="mk"><span class="mouse m" aria-hidden="true"><i class="fa-solid fa-computer-mouse"></i><b></b></span>Zoom</span>
+      </div>
+      <div class="quick" role="group" aria-label="Spindle controls">
+        <div class="hlbar" role="group" aria-label="Highlight colors"></div>
+        <button class="ib" id="panelBtn" aria-pressed="false" aria-label="Hide the reading panel" data-tip="Hide the reading panel&#10;Gives the 3D view the whole height."><i class="fa-solid fa-angles-down ic-off"></i><i class="fa-solid fa-angles-up ic-on"></i></button>
+        <button class="ib" id="closeQuick" aria-label="Close to max" data-tip="Close to max&#10;Closes the spindle to the lowest reading, or until it touches the part."><i class="fa-solid fa-down-left-and-up-right-to-center"></i></button>
+        <button class="ib" id="openQuick" aria-label="Open all the way" data-tip="Open all the way&#10;Opens the spindle to the top of this frame’s range."><i class="fa-solid fa-up-right-and-down-left-from-center"></i></button>
+        <button class="ib" id="fineQuick" aria-label="Fine adjust" aria-pressed="false" data-tip="Fine adjust&#10;Slows every control down about 10× for hairline moves."><i class="fa-solid fa-feather-pointed"></i></button>
+        <button class="ib" id="lockQuick" aria-label="Lock spindle" aria-pressed="false" data-tip="Lock spindle&#10;Flips the lock lever so the spindle can’t turn. The lever turns red while locked."><i class="fa-solid fa-lock-open ic-off"></i><i class="fa-solid fa-lock ic-on"></i></button>
+        <div class="goto" role="group" aria-label="Go to a reading"><input type="text" id="setTo" placeholder="Go to 0.6254 in" inputmode="decimal" aria-label="Move spindle to reading"><button class="ib" id="goBtn" aria-label="Go to that reading">Go</button></div>
+      </div>
+      <div class="flat" id="flat">
+        <div class="flat-h"><span>Sleeve &amp; thimble, flat view</span><span class="flat-btns"><button class="ib sm" id="flatMaxBtn" aria-pressed="false" aria-label="Maximize flat view" data-tip="Maximize flat view&#10;Stretches it to the full height of the 3D view."><i class="fa-solid fa-expand ic-off"></i><i class="fa-solid fa-compress ic-on"></i></button><button class="ib sm" id="flatBtn" aria-label="Hide flat view" aria-expanded="true" data-tip="Hide flat view"><i class="fa-solid fa-eye-slash ic-on"></i><i class="fa-solid fa-eye ic-off"></i></button></span></div>
+        <canvas id="flatCv" width="260" height="280" role="img" aria-label="Unrolled sleeve and thimble scales"></canvas>
+      </div>
+    </div>
+
+    <div class="flat-dock" id="flatDock"></div>
+    <div class="split" id="split" role="separator" aria-orientation="horizontal" aria-label="Resize the reading panel" tabindex="0"><span></span></div>
+    <section class="reading" id="reading" aria-live="polite">
+      <div class="value">
+        <div class="answer"><span class="num" id="lcd">0.2500</span><span class="unit">in</span><span class="mm" id="lcdmm"></span></div>
+        <div class="pract">
+          <label class="pl" for="guess">Your reading</label>
+          <div class="prow">
+            <input type="text" id="guess" placeholder="0.0000" inputmode="decimal" autocomplete="off" aria-describedby="feedback">
+            <button class="pgo" id="checkBtn"><i class="fa-solid fa-check"></i><span>Check</span></button>
+            <button class="pgo alt" id="randomBtn" data-tip="New part&#10;Random frame size, part and feature."><i class="fa-solid fa-shuffle"></i><span>Next</span></button>
+          </div>
+        </div>
+        <div class="status" id="status">Spindle free</div>
+      </div>
+      <div class="bd">
+        <div class="cell feat" id="featCell"><span class="k" id="fK">Measuring</span><span class="v" id="fV">—</span><span class="h" id="fH"></span></div>
+        <div class="cell answer"><span class="k">Frame size</span><span class="v" id="vBase"></span><span class="h" id="hBase"></span></div>
+        <span class="op answer">+</span>
+        <div class="cell answer" data-c="num"><span class="k">Sleeve number</span><span class="v" id="vA"></span><span class="h" id="hA"></span></div>
+        <span class="op answer">+</span>
+        <div class="cell answer" data-c="line"><span class="k">Sleeve lines</span><span class="v" id="vB"></span><span class="h" id="hB"></span></div>
+        <span class="op answer">+</span>
+        <div class="cell answer" data-c="thimble"><span class="k">Thimble</span><span class="v" id="vC"></span><span class="h" id="hC"></span></div>
+        <span class="op answer">+</span>
+        <div class="cell answer" data-c="vernier"><span class="k">Vernier</span><span class="v" id="vD"></span><span class="h" id="hD"></span></div>
+        <span class="op answer">=</span>
+        <div class="cell total answer"><span class="k">Reading</span><span class="v" id="vT"></span><span class="h">inches</span></div>
+      </div>
+      <div class="meta answer">Actual gap between faces <b id="gap"></b></div>
+      <div class="pfb" id="feedback" role="status" aria-live="polite"></div>
+    </section>
+  </main>
+</div>
+
+<div class="tut" id="tut" role="dialog" aria-modal="true" aria-labelledby="tutTitle" hidden>
+  <div class="tut-card">
+    <h3 id="tutTitle">Welcome to the micrometer!</h3>
+    <p>This one measures thickness to a ten-thousandth of an inch, far thinner than a hair. It’s really just careful counting, and we’ll do it together.</p>
+    <p class="tut-mouse"><b>New to the mouse?</b> <b>Click</b> = press the left button once. <b>Drag</b> = hold it down, move, then let go. That’s all you need.</p>
+    <ol>
+      <li><b>Pick a size and a part.</b> Choose a frame size on the left (its first number starts every reading), then a part, then click a feature to measure it.</li>
+      <li><b>Read it.</b> Frame size + the last sleeve number (0.100″) + small lines after it (0.025″) + the thimble line at the center line (0.001″) + the top line that lines up perfectly (0.0001″).</li>
+      <li><b>Turn on the colors.</b> The colored dots at the bottom left start off. Tap one and its piece of the reading lights up on the tool. Tap it again to hide it.</li>
+      <li><b>Jump to a size.</b> Type into the “Go to” box at the bottom left and press Go. Add “in” or “mm” (like “0.6254 in” or “15.9 mm”) and it knows which you mean.</li>
+      <li><b>Zoom the flat view.</b> The box in the corner shows the scales flat. The expand button makes it full height; the eye hides it.</li>
+      <li><b>Clear or real?</b> Markings start on plain, easy-to-read metal. The gem button at the top right brings back the real machined finish.</li>
+      <li><b>Practice.</b> Click “Practice,” type what you read, then “Check.” Slip up? No stress. It shows exactly which step went wrong, and why.</li>
+    </ol>
+    <div class="row"><button class="primary" id="tutClose">Let’s measure!</button></div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/js/all.min.js"><\/script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"><\/script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"><\/script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/utils/BufferGeometryUtils.js"><\/script>
+<script src="js/micrometer.js"><\/script>
+<script src="js/color-dots.js"><\/script>
+<script src="js/dropdowns.js"><\/script>
+</body>
+</html>
+</script>
+<script type="text/html" id="tool-depth">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Depth Micrometer · 3D</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/depth.css">
+</head>
+<body>
+<div class="app">
+  <aside id="panel">
+    <header class="logo">
+      <h1 class="logo-mark" aria-label="Depth micrometer">
+        <span class="logo-brk" aria-hidden="true">[</span>
+        <span class="logo-stack"><span class="logo-top">Depth</span><span class="logo-bot">Micrometer</span></span>
+        <span class="logo-brk" aria-hidden="true">]</span>
+      </h1>
+      <div class="logo-rule" aria-hidden="true"></div>
+      <div class="logo-foot"><span class="logo-range" id="brand">0–1″ rod</span><button id="tutBtn">Tutorial</button></div>
+    </header>
+
+    <section>
+      <h2>Measuring rod</h2>
+      <div class="grid3" role="group" aria-label="Measuring rod">
+        <button data-range="0" aria-pressed="true">0–1″</button>
+        <button data-range="1" aria-pressed="false">1–2″</button>
+        <button data-range="2" aria-pressed="false">2–3″</button>
+        <button data-range="3" aria-pressed="false">3–4″</button>
+        <button data-range="4" aria-pressed="false">4–5″</button>
+        <button data-range="5" aria-pressed="false">5–6″</button>
+      </div>
+      <p class="note" style="margin:8px 0 0">Rods swap in 1″ steps and screw in under the ratchet cap. The rod you fit is added to the scales.</p>
+    </section>
+
+    <section>
+      <h2>Rod travel</h2>
+      <button class="tgl" id="fineBtn" aria-pressed="false" data-tip="Fine adjust&#10;Slows the thimble, the ratchet and the arrow keys down about 10× so you can creep onto a line."><i class="fa-solid fa-feather-pointed"></i><span>Fine adjust</span><em>off</em></button>
+      <input type="range" id="slider" min="0" max="1000" step="1" aria-label="Rod extension">
+      <div class="units" role="group" aria-label="Units"><button type="button" data-units="in" aria-pressed="true">Inches</button><button type="button" data-units="mm" aria-pressed="false">Millimeters</button></div>
+      <div class="grid3">
+        <button data-step="-0.100">−.100</button>
+        <button data-step="-0.025">−.025</button>
+        <button data-step="-0.001">−.001</button>
+        <button data-step="0.100">+.100</button>
+        <button data-step="0.025">+.025</button>
+        <button data-step="0.001">+.001</button>
+      </div>
+      <div class="row">
+        <button id="closeBtn">Retract fully</button>
+        <button id="openBtn">Extend fully</button>
+      </div>
+      <div class="row">
+        <button id="ratchetBtn">Run down with ratchet</button>
+        <button id="lockBtn" aria-pressed="false">Lock rod</button>
+      </div>
+      <label class="chk" style="margin-top:10px"><input type="checkbox" id="coachChk" checked> Remind me to use the ratchet</label>
+    </section>
+
+    <section class="sample-sec">
+      <h2>Part</h2>
+      <select id="sampleSel" aria-label="Part to measure"></select>
+      <div class="row"><button id="newVals">New random depths</button></div>
+      <p class="note" style="margin:8px 0 0">Click a feature to measure it, or drag the part under the base yourself. The micrometer lifts while the part moves, then the base seats on the top face. Depths change every time, within ±0.010″ of nominal.</p>
+      <div id="feats"></div>
+      <div class="row"><button id="revealBtn">Show actual</button></div>
+    </section>
+
+    <section>
+      <h2>Section view</h2>
+      <div class="reveal">
+        <button type="button" id="revealInside"><i class="fa-solid fa-eye"></i> Reveal inside</button>
+        <div class="reveal-dir" role="group" aria-label="Cut direction">
+          <button type="button" data-cutdir="+z" aria-pressed="false">Front</button>
+          <button type="button" data-cutdir="+x" aria-pressed="false">Side</button>
+        </div>
+      </div>
+      <label class="chk"><input type="checkbox" id="sectionChk"> Section the part</label>
+      <input type="range" id="cutT" min="0" max="100" step="1" value="45" aria-label="How far to cut in from the chosen face" disabled>
+      <p class="note" id="cutNote" style="margin:0">Switch it on and pick Front or Side to choose where it cuts in from, then slide: the part dissolves away in that direction and the cut face is hatched.</p>
+    </section>
+
+    <section class="answer">
+      <h2>Highlights</h2>
+      <div class="hlcards">
+        <label class="hlcard" style="--c:var(--hl-num)"><input type="checkbox" data-hl="num"><span><b>Sleeve number</b><small>Last number the thimble has covered, shown through it</small></span></label>
+        <label class="hlcard" style="--c:var(--hl-line)"><input type="checkbox" data-hl="line"><span><b>Sleeve line</b><small>Last line covered past that number</small></span></label>
+        <label class="hlcard" style="--c:var(--hl-thimble)"><input type="checkbox" data-hl="thimble"><span><b>Thimble line</b><small>The thimble line at the index line</small></span></label>
+        <label class="hlcard" style="--c:var(--hl-floor)"><input type="checkbox" data-hl="outline" checked><span><b>Measured face</b><small>Tints green the floor the rod is touching</small></span></label>
+      </div>
+    </section>
+
+    <section>
+      <h2>Settings</h2>
+      <label class="pl" for="gfxSel">Graphics</label>
+      <select id="gfxSel" aria-label="Graphics quality">
+        <option value="high" selected>High</option>
+        <option value="medium">Balanced</option>
+        <option value="low">Low</option>
+      </select>
+      <p class="note" id="gfxInfo" style="margin:8px 0 0">Resolution adapts automatically to hold 60 fps.</p>
+      <label class="chk" style="margin:12px 0 0"><input type="checkbox" id="soundChk"> Sound effects</label>
+      <label class="chk" style="margin:12px 0 0"><input type="checkbox" id="realChk"> Realistic metal finish</label>
+      <p class="note" style="margin:6px 0 0">Adds real turning and grinding marks. Off keeps the markings clear and easy to read.</p>
+      <p class="note" style="margin:4px 0 0">The ratchet clicks as it slips. Off by default.</p>
+    </section>
+
+    <section class="help">
+      <h2>Reading the scales</h2>
+      <p><b>Rod size</b> is the starting inch: a 2–3″ rod adds 2.000″ to what the scales show.</p>
+      <p><b>The sleeve runs backwards.</b> Numbers count toward the base, and the thimble <i>covers</i> the reading as the rod goes down. Read the last number the thimble has covered (0.100″ each), then the covered lines past it (0.025″ each).</p>
+      <p><b>Thimble lines</b> add 0.001″ each; one turn is 0.025″ (40 TPI).</p>
+      <p><b>Mouse:</b> drag the thimble or ratchet to turn, click the knurled clamp ring above the base, drag the part under the base. Shift for fine control.</p>
+      <p><b>Keys:</b> ↑↓ 0.001″, Shift+↑↓ 0.010″, PgUp/PgDn 0.025″, R ratchet, L lock, A auto measure, C section view, Esc dismiss.</p>
+    </section>
+  </aside>
+
+  <main>
+    <div id="view">
+      <div class="loading" id="loading"><div class="ld"><span class="ld-t" id="ldT">Loading the 3D engine…</span><div class="ld-bar" role="progressbar" aria-label="Loading" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i id="ldFill"></i></div><span class="ld-p" id="ldP">0%</span></div></div>
+      <script src="js/loading.js"><\/script>
+      <div class="actions">
+        <button class="ib" id="sideBtn" aria-pressed="false" aria-label="Hide the side panel" data-tip="Hide the side panel&#10;Gives the 3D view the whole width."><i class="fa-solid fa-angles-left ic-off"></i><i class="fa-solid fa-angles-right ic-on"></i></button>
+        <button class="ib" id="autoBtn" aria-label="Auto measure" data-tip="Auto measure&#10;Backs the rod off, lifts, slides the part under the base and runs the rod down with the ratchet."><i class="fa-solid fa-wand-magic-sparkles"></i></button>
+        <button class="pbtn" id="examBtn" data-tip="Examination&#10;Cinematic tour with labels on every part. Rotate, pan and zoom freely."><i class="fa-solid fa-binoculars"></i><span>Examine</span></button>
+        <button class="pbtn" id="practiceBtn" aria-pressed="false" data-tip="Practice reading&#10;Hides the answers, picks a random rod and part, and puts an answer box in the reading bar."><i class="fa-solid fa-graduation-cap"></i><span>Practice</span></button>
+        <button class="pbtn" id="faceBtn" aria-pressed="false" data-tip="Click face to measure&#10;Click any flat face on the part and the tool moves there and measures it. Dragging the part still slides it."><i class="fa-solid fa-hand-pointer"></i><span>Click face</span></button>
+        <button class="ib" id="pullBtn" aria-label="Move the part away" data-tip="Move the part away&#10;Lifts the micrometer and slides the part out from under the base."><i class="fa-solid fa-arrow-right-from-bracket"></i></button>
+      </div>
+      <div class="views" role="group" aria-label="Camera views">
+        <button class="ib" data-view="iso" aria-label="Iso view" data-tip="Iso view&#10;Angled overview of the whole micrometer."><i class="fa-solid fa-cube"></i></button>
+        <button class="ib" data-view="front" aria-label="Front view" data-tip="Front view&#10;Straight-on view of the base and part."><i class="fa-solid fa-vector-square"></i></button>
+        <button class="ib" data-view="scale" aria-label="Scale view" data-tip="Scale view&#10;Close-up of the sleeve numbers, lines and thimble."><i class="fa-solid fa-magnifying-glass-plus"></i></button>
+        <button class="ib" data-view="tip" aria-label="Rod tip view" data-tip="Rod tip view&#10;Close-up of the rod end on the floor it is measuring."><i class="fa-solid fa-ruler-vertical"></i></button>
+        <button class="ib" id="tableBtn" aria-pressed="false" aria-label="Hide the table" data-tip="Hide the table&#10;Takes the granite table out of the picture."><i class="fa-solid fa-eye ic-off"></i><i class="fa-solid fa-eye-slash ic-on"></i></button>
+        <div class="cut-col">
+          <button class="ib" id="cutBtn" aria-pressed="false" aria-label="Section view" data-tip="Section view&#10;Cuts the part open so you can see the rod inside.&#10;Pick Front or Side below to choose where it cuts from."><i class="fa-solid fa-scissors"></i></button>
+          <button class="ib cutdir" data-cutdir="+z" aria-pressed="false" data-tip="Section from the front&#10;Cuts straight in from the front face.">Front</button>
+          <button class="ib cutdir" data-cutdir="+x" aria-pressed="false" data-tip="Section from the side&#10;Cuts straight in from the right-hand side.">Side</button>
+        </div>
+      </div>
+      <div class="coach" role="alertdialog" aria-labelledby="coachTitle">
+        <h3 id="coachTitle">Use the ratchet stop</h3>
+        <p>The rod is about to touch the floor. Turning the thimble from here pushes the base off the part and changes the reading. Turn the highlighted ratchet on top instead — it clicks when the pressure is right.</p>
+        <button class="primary" id="coachOk">Got it</button>
+      </div>
+      <div class="xlayer" id="xlayer" aria-hidden="true"><svg id="xsvg"></svg></div>
+      <div class="cine top"><span class="ct">Examination</span><div class="cc">
+        <button class="pbtn" id="spinBtn" aria-pressed="true"><i class="fa-solid fa-rotate"></i><span>Auto-rotate</span></button>
+        <button class="pbtn" id="labelsBtn" aria-pressed="true"><i class="fa-solid fa-tags"></i><span>Labels</span></button>
+        <button class="pbtn" id="exitExam"><i class="fa-solid fa-xmark"></i><span>Exit</span></button></div></div>
+      <div class="cine bot"><span class="hint">Left-drag to rotate · right-drag to pan · scroll to zoom · Esc to exit</span></div>
+      <div class="warn-card" id="gbWarn" role="note" hidden><i class="fa-solid fa-triangle-exclamation"></i><div><b>Use a micro-hite or a height gage for this kind of inspection setup, this isn't ideal for depth mics</b><span>This is only to get an idea how to use the tool itself</span></div></div>
+      <div class="toast" id="toast" role="status" aria-live="polite"></div>
+      <div class="legend" aria-label="Mouse controls">
+        <span class="mk"><span class="mouse l" aria-hidden="true"><i class="fa-solid fa-computer-mouse"></i><b></b></span>Rotate</span>
+        <span class="mk"><span class="mouse r" aria-hidden="true"><i class="fa-solid fa-computer-mouse"></i><b></b></span>Pan</span>
+        <span class="mk"><span class="mouse m" aria-hidden="true"><i class="fa-solid fa-computer-mouse"></i><b></b></span>Zoom</span>
+      </div>
+      <div class="quick" role="group" aria-label="Rod controls">
+        <div class="hlbar" role="group" aria-label="Highlight colors"></div>
+        <button class="ib" id="panelBtn" aria-pressed="false" aria-label="Hide the reading panel" data-tip="Hide the reading panel&#10;Gives the 3D view the whole height."><i class="fa-solid fa-angles-down ic-off"></i><i class="fa-solid fa-angles-up ic-on"></i></button>
+        <button class="ib" id="closeQuick" aria-label="Retract fully" data-tip="Retract fully&#10;Winds the rod back to zero on the sleeve."><i class="fa-solid fa-up-right-and-down-left-from-center"></i></button>
+        <button class="ib" id="openQuick" aria-label="Extend to the floor" data-tip="Extend to the floor&#10;Runs the rod down until it touches, or to the end of its 1″ travel."><i class="fa-solid fa-down-left-and-up-right-to-center"></i></button>
+        <button class="ib" id="fineQuick" aria-label="Fine adjust" aria-pressed="false" data-tip="Fine adjust&#10;Slows every control down about 10× for hairline moves."><i class="fa-solid fa-feather-pointed"></i></button>
+        <button class="ib" id="lockQuick" aria-label="Lock rod" aria-pressed="false" data-tip="Lock rod&#10;Twists the knurled clamp ring so the rod can’t move. The ring turns red while locked."><i class="fa-solid fa-lock-open ic-off"></i><i class="fa-solid fa-lock ic-on"></i></button>
+        <div class="goto" role="group" aria-label="Go to a reading"><input type="text" id="setTo" placeholder="Inches only: 0.625" title="The depth micrometer reads in inches only" inputmode="decimal" aria-label="Move the rod to a reading"><button class="ib" id="goBtn" aria-label="Go to that reading">Go</button></div>
+      </div>
+      <div class="flat" id="flat">
+        <div class="flat-h"><span>Sleeve &amp; thimble, flat view</span><span class="flat-btns"><button class="ib sm" id="flatMaxBtn" aria-pressed="false" aria-label="Maximize flat view" data-tip="Maximize flat view&#10;Stretches it to the full height of the 3D view."><i class="fa-solid fa-expand ic-off"></i><i class="fa-solid fa-compress ic-on"></i></button><button class="ib sm" id="flatBtn" aria-label="Hide flat view" aria-expanded="true" data-tip="Hide flat view"><i class="fa-solid fa-eye-slash ic-on"></i><i class="fa-solid fa-eye ic-off"></i></button></span></div>
+        <canvas id="flatCv" width="260" height="280" role="img" aria-label="Unrolled sleeve and thimble scales"></canvas>
+      </div>
+    </div>
+
+    <div class="flat-dock" id="flatDock"></div>
+    <div class="warn-dock" id="warnDock"></div>
+    <div class="split" id="split" role="separator" aria-orientation="horizontal" aria-label="Resize the reading panel" tabindex="0"><span></span></div>
+    <section class="reading" id="reading" aria-live="polite">
+      <div class="value">
+        <div class="answer"><span class="num" id="lcd">0.000</span><span class="unit">in</span><span class="mm" id="lcdmm"></span></div>
+        <div class="pract">
+          <label class="pl" for="guess">Your reading</label>
+          <div class="prow">
+            <input type="text" id="guess" placeholder="0.000" inputmode="decimal" autocomplete="off" aria-describedby="feedback">
+            <button class="pgo" id="checkBtn"><i class="fa-solid fa-check"></i><span>Check</span></button>
+            <button class="pgo alt" id="randomBtn" data-tip="New part&#10;Random rod, part and feature."><i class="fa-solid fa-shuffle"></i><span>Next</span></button>
+          </div>
+        </div>
+        <div class="status" id="status">Rod free</div>
+      </div>
+      <div class="bd">
+        <div class="cell feat" id="featCell"><span class="k" id="fK">Measuring</span><span class="v" id="fV">—</span><span class="h" id="fH"></span></div>
+        <div class="cell answer"><span class="k">Rod size</span><span class="v" id="vBase"></span><span class="h" id="hBase"></span></div>
+        <span class="op answer">+</span>
+        <div class="cell answer" data-c="num"><span class="k">Sleeve number</span><span class="v" id="vA"></span><span class="h" id="hA"></span></div>
+        <span class="op answer">+</span>
+        <div class="cell answer" data-c="line"><span class="k">Sleeve lines</span><span class="v" id="vB"></span><span class="h" id="hB"></span></div>
+        <span class="op answer">+</span>
+        <div class="cell answer" data-c="thimble"><span class="k">Thimble</span><span class="v" id="vC"></span><span class="h" id="hC"></span></div>
+        <span class="op answer">=</span>
+        <div class="cell total answer"><span class="k">Reading</span><span class="v" id="vT"></span><span class="h">inches</span></div>
+      </div>
+      <div class="meta answer">Depth under the rod <b id="gap"></b></div>
+      <div class="pfb" id="feedback" role="status" aria-live="polite"></div>
+    </section>
+  </main>
+</div>
+
+<div class="tut" id="tut" role="dialog" aria-modal="true" aria-labelledby="tutTitle" hidden>
+  <div class="tut-card">
+    <h3 id="tutTitle">Welcome to the depth micrometer!</h3>
+    <p>This one measures how deep things are. One twist to remember: read the numbers the thimble has <i>covered</i>, not the ones you can still see. Everyone trips on it at first!</p>
+    <p class="tut-mouse"><b>New to the mouse?</b> <b>Click</b> = press the left button once. <b>Drag</b> = hold it down, move, then let go. That’s all you need.</p>
+    <ol>
+      <li><b>Pick a rod and a part.</b> Choose a rod on the left (its first number is added to the reading), then a part, then click a feature to measure it.</li>
+      <li><b>Read it.</b> Rod size + the last number covered (0.100″) + the small lines covered after it (0.025″) + the thimble line at the center line (0.001″).</li>
+      <li><b>See where it’s measuring.</b> The green dot at the bottom left tints the face the rod is touching. Turn it off for a plain part.</li>
+      <li><b>Turn on the colors.</b> The colored dots at the bottom left start off. Tap one and its piece of the reading lights up on the tool. Tap it again to hide it.</li>
+      <li><b>Jump to a size.</b> Type into the “Go to” box at the bottom left and press Go. Add “in” or “mm” (like “0.625 in” or “12 mm”) and it knows which you mean.</li>
+      <li><b>Zoom the flat view.</b> The box in the corner shows the scales flat. The expand button makes it full height; the eye hides it.</li>
+      <li><b>Clear or real?</b> Markings start on plain, easy-to-read metal. The gem button at the top right brings back the real machined finish.</li>
+      <li><b>Practice.</b> Click “Practice,” type what you read, then “Check.” Slip up? No stress. It shows exactly which step went wrong, and why.</li>
+    </ol>
+    <div class="row"><button class="primary" id="tutClose">Let’s measure!</button></div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/js/all.min.js"><\/script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"><\/script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"><\/script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/utils/BufferGeometryUtils.js"><\/script>
+<script src="https://cdn.jsdelivr.net/npm/clipper-lib@6.4.2/clipper.js"><\/script>
+<script src="js/depth.js"><\/script>
+<script src="js/color-dots.js"><\/script>
+<script src="js/dropdowns.js"><\/script>
+</body>
+</html>
+</script>
+<script type="text/html" id="tool-height">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Vernier Height Gage · 3D</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/height.css">
+</head>
+<body>
+<div class="app">
+  <aside>
+    <header class="logo">
+      <h1 class="logo-mark" aria-label="Height gage">
+        <span class="logo-brk" aria-hidden="true">[</span>
+        <span class="logo-stack"><span>Height</span><span class="logo-bot">Gage</span></span>
+        <span class="logo-brk" aria-hidden="true">]</span>
+      </h1>
+      <div class="logo-rule" aria-hidden="true"></div>
+      <span class="logo-range">0–12″ / 0–300 mm</span>
+      <div><button class="tut-btn" id="tutBtn" type="button">Tutorial</button></div>
+    </header>
+
+    <section>
+      <h2>Slider</h2>
+      <div class="units" role="group" aria-label="Units"><button type="button" data-units="in" aria-pressed="true">Inches</button><button type="button" data-units="mm" aria-pressed="false">Millimeters</button></div>
+      <div class="grid3">
+        <button data-move="-25.4">−1″</button>
+        <button data-move="-2.54">−.100″</button>
+        <button data-move="-0.254">−.010″</button>
+        <button data-move="25.4">+1″</button>
+        <button data-move="2.54">+.100″</button>
+        <button data-move="0.254">+.010″</button>
+      </div>
+      <div class="row">
+        <button id="lowerBtn" class="primary">Bring down onto the part</button>
+      </div>
+      <div class="row"><button class="tgl" id="fineBtn" aria-pressed="false" data-tip="Fine adjust&#10;Slows the slider, the fine-feed nut, the scale knob and the arrow keys down about 10× so you can creep onto a line."><i class="fa-solid fa-feather-pointed"></i><span>Fine adjust</span><em>off</em></button></div>
+      <p class="sub">Clamps</p>
+      <div class="grid2">
+        <button id="clampUnit" class="lock" aria-pressed="false">Clamp fine-feed unit</button>
+        <button id="clampSlider" class="lock" aria-pressed="false">Clamp slider</button>
+      </div>
+      <p class="sub">Fine feed (unit clamped)</p>
+      <div class="grid2">
+        <button data-fine="-1" title="Turn the fine-feed nut: slider down">Nut ↓ slider down</button>
+        <button data-fine="1" title="Turn the fine-feed nut: slider up">Nut ↑ slider up</button>
+      </div>
+      <p class="note">Coarse: drag the slider. Fine: clamp the upper unit, then turn the knurled nut on top of it (drag it or scroll over it). Clamp the slider to hold the reading.</p>
+    </section>
+
+    <section>
+      <h2>Main scale zero</h2>
+      <input type="range" id="zeroAdj" min="-750" max="750" step="1" value="0" aria-label="Main scale adjustment">
+      <div class="row">
+        <button id="zeroBtn">Set zero on the plate</button>
+        <button id="reclampBtn" title="Loosen and re-tighten the scriber clamp: the scriber ends up slightly high or low">Re-clamp scriber</button>
+      </div>
+      <p class="note" id="zeroNote">The whole main scale slides up to 7.5 mm either way on the knob at the top of the beam, so the gage can be zeroed on the plate.</p>
+    </section>
+
+    <section>
+      <h2>Part</h2>
+      <select id="partSel" aria-label="Part to measure"></select>
+      <div id="feats"></div>
+      <div class="row"><button id="newVals">New random heights</button><button id="revealBtn">Show actual</button></div>
+    </section>
+
+    <section class="answer">
+      <h2>Highlights</h2>
+      <div class="hlcards">
+        <label class="hlcard" style="--c:var(--hl-main)"><input type="checkbox" data-hl="imain"><span><b>Inch main scale</b><small>Last 0.050″ line below the vernier 0</small></span></label>
+        <label class="hlcard" style="--c:var(--hl-vern)"><input type="checkbox" data-hl="ivern"><span><b>Inch vernier</b><small>The line that lines up — 0.001″ each</small></span></label>
+        <label class="hlcard" style="--c:var(--hl-mmain)"><input type="checkbox" data-hl="mmain"><span><b>Metric main scale</b><small>Last 1 mm line below the vernier 0</small></span></label>
+        <label class="hlcard" style="--c:#2fd36b"><input type="checkbox" data-hl="face" checked><span><b>Measured face</b><small>Tints green the part face the scriber is on</small></span></label>
+        <label class="hlcard" style="--c:var(--hl-mvern)"><input type="checkbox" data-hl="mvern"><span><b>Metric vernier</b><small>The line that lines up — 0.02 mm each</small></span></label>
+      </div>
+    </section>
+
+    <section>
+      <h2>Settings</h2>
+      <label class="chk" style="margin:0"><input type="checkbox" id="realChk"> Realistic metal finish</label>
+      <p class="note" style="margin:6px 0 0">Adds real turning and grinding marks. Off keeps the markings clear and easy to read.</p>
+    </section>
+    <section class="help">
+      <h2>Reading a vernier height gage</h2>
+      <p><b>Inch (left):</b> the main scale is in 0.050″ steps. Take the last line below the vernier 0, then add the vernier line that lines up exactly with a main-scale line — each one is 0.001″.</p>
+      <p><b>Metric (right):</b> whole millimeters from the main scale, plus the lined-up vernier line × 0.02 mm. The vernier's big numbers are tenths of a millimeter.</p>
+      <p><b>Mouse:</b> drag the part to slide it around the plate (the scriber lifts to 0.100″ above its tallest point; the face it will land on turns green, and holding still for a moment or letting go measures it), drag the slider or scriber to move it, drag or scroll the fine-feed nut, click a clamp knob to lock it, turn the knob at the top of the beam to shift the main scale.</p>
+      <p><b>Keys:</b> ↑↓ 0.001″ (0.02 mm in millimeters; the fine nut when the unit is clamped), Shift for 0.050″ (1 mm), F fine adjust, U / S clamps, V vernier view.</p>
+    </section>
+  </aside>
+
+  <main>
+    <div id="view">
+      <div class="loading" id="loading"><div class="ld"><span class="ld-t" id="ldT">Loading the 3D engine…</span><div class="ld-bar" role="progressbar" aria-label="Loading" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i id="ldFill"></i></div><span class="ld-p" id="ldP">0%</span></div></div>
+      <script src="js/loading.js"><\/script>
+      <div class="actions">
+        <button class="ib" id="sideBtn" aria-pressed="false" aria-label="Hide the side panel" data-tip="Hide the side panel&#10;Gives the 3D view the whole width."><i class="fa-solid fa-angles-left ic-off"></i><i class="fa-solid fa-angles-right ic-on"></i></button>
+        <button class="pbtn" id="examBtn" data-tip="Examination&#10;Cinematic tour with labels on every part. Rotate, pan and zoom freely."><i class="fa-solid fa-binoculars"></i><span>Examine</span></button>
+        <button class="pbtn" id="practiceBtn" aria-pressed="false" data-tip="Practice reading&#10;Hides the readings and picks a random part and height."><i class="fa-solid fa-graduation-cap"></i><span>Practice</span></button>
+        <button class="pbtn" id="faceBtn" aria-pressed="false" data-tip="Click face to measure&#10;Click any flat face on the part and the tool moves there and measures it. Dragging the part still slides it."><i class="fa-solid fa-hand-pointer"></i><span>Click face</span></button>
+      </div>
+      <div class="quick" role="group" aria-label="Panel controls">
+        <div class="hlbar" role="group" aria-label="Highlight colors"></div>
+        <button class="ib" id="panelBtn" aria-pressed="false" aria-label="Hide the reading panel" data-tip="Hide the reading panel&#10;Gives the 3D view the whole height."><i class="fa-solid fa-angles-down ic-off"></i><i class="fa-solid fa-angles-up ic-on"></i></button>
+        <div class="goto" role="group" aria-label="Go to a reading"><input type="text" id="setTo" placeholder="Go to 3.742 in" inputmode="decimal" aria-label="Move the scriber to a reading"><button class="ib" id="goBtn" aria-label="Go to that reading">Go</button></div>
+      </div>
+      <div class="xlayer" id="xlayer" aria-hidden="true"><svg id="xsvg"></svg></div>
+      <div class="cine top"><span class="ct">Examination</span><div class="cc">
+        <button class="pbtn" id="spinBtn" aria-pressed="true"><i class="fa-solid fa-rotate"></i><span class="lbl">Auto-rotate</span></button>
+        <button class="pbtn" id="labelsBtn" aria-pressed="true"><i class="fa-solid fa-tags"></i><span class="lbl">Labels</span></button>
+        <button class="pbtn" id="exitExam" aria-label="Exit examination"><i class="fa-solid fa-xmark"></i><span class="lbl">Exit</span></button></div></div>
+      <div class="cine bot"><span class="chint">Left-drag to rotate · right-drag to pan · scroll to zoom · Esc to exit</span></div>
+      <div class="views" role="group" aria-label="Camera views">
+        <button class="ib" data-view="iso" aria-label="Iso view" data-tip="Iso view"><i class="fa-solid fa-cube"></i></button>
+        <button class="ib" data-view="front" aria-label="Front view" data-tip="Front view"><i class="fa-solid fa-vector-square"></i></button>
+        <button class="ib" data-view="vernier" aria-label="Vernier view" data-tip="Vernier close-up&#10;Both scales and both verniers."><i class="fa-solid fa-ruler-vertical"></i></button>
+        <button class="ib" data-view="scriber" aria-label="Scriber view" data-tip="Scriber close-up&#10;The carbide tip on the part."><i class="fa-solid fa-magnifying-glass-plus"></i></button>
+        <button class="ib" id="tableBtn" aria-pressed="false" aria-label="Hide the table" data-tip="Hide the table&#10;Takes the granite table out of the picture."><i class="fa-solid fa-eye ic-off"></i><i class="fa-solid fa-eye-slash ic-on"></i></button>
+      </div>
+      <div class="flat" id="flat">
+        <div class="flat-h"><span>Scales, flat view</span><span class="flat-btns"><button class="ib sm" id="flatMaxBtn" aria-pressed="false" aria-label="Maximize flat view" data-tip="Maximize flat view&#10;Stretches it to the full height of the 3D view."><i class="fa-solid fa-expand ic-off"></i><i class="fa-solid fa-compress ic-on"></i></button><button class="ib sm" id="flatBtn" aria-label="Hide flat view" aria-expanded="true" data-tip="Hide flat view"><i class="fa-solid fa-eye-slash"></i></button></span></div>
+        <canvas id="loupeCv" width="260" height="116" role="img" aria-label="Close-up of the vernier lines that line up, inch and metric"></canvas>
+        <canvas id="flatCv" width="260" height="280" role="img" aria-label="Main scales and verniers, drawn flat"></canvas>
+      </div>
+      <div class="toast" id="toast" role="status" aria-live="polite"></div>
+      <div class="legend" aria-label="Mouse controls">
+        <span class="mk"><span class="mouse l" aria-hidden="true"><i class="fa-solid fa-computer-mouse"></i><b></b></span>Rotate</span>
+        <span class="mk"><span class="mouse r" aria-hidden="true"><i class="fa-solid fa-computer-mouse"></i><b></b></span>Pan</span>
+        <span class="mk"><span class="mouse m" aria-hidden="true"><i class="fa-solid fa-computer-mouse"></i><b></b></span>Zoom</span>
+      </div>
+      <div class="hint" id="hint" hidden></div>
+    </div>
+    <div class="flat-dock" id="flatDock"></div>
+    <section class="reading" id="reading" aria-live="polite">
+      <div class="rgroup answer">
+        <span class="rtitle">Inch</span>
+        <div class="cell" style="--c:var(--hl-main)"><span class="k">Main scale</span><span class="v" id="iMain"></span><span class="h" id="iMainH"></span></div>
+        <span class="op">+</span>
+        <div class="cell" style="--c:var(--hl-vern)"><span class="k">Vernier</span><span class="v" id="iVern"></span><span class="h" id="iVernH"></span></div>
+        <span class="op">=</span>
+        <div class="cell total"><span class="k">Reading</span><span class="v" id="iTot"></span><span class="h">inches</span></div>
+      </div>
+      <div class="rgroup answer">
+        <span class="rtitle">Metric</span>
+        <div class="cell" style="--c:var(--hl-mmain)"><span class="k">Main scale</span><span class="v" id="mMain"></span><span class="h" id="mMainH"></span></div>
+        <span class="op">+</span>
+        <div class="cell" style="--c:var(--hl-mvern)"><span class="k">Vernier</span><span class="v" id="mVern"></span><span class="h" id="mVernH"></span></div>
+        <span class="op">=</span>
+        <div class="cell total"><span class="k">Reading</span><span class="v" id="mTot"></span><span class="h">millimeters</span></div>
+      </div>
+      <div class="rstat">
+        <span class="status-chip" id="status">Slider free</span>
+        <span class="status-chip" id="contact">Scriber in the air</span>
+      </div>
+      <div class="pract">
+        <select id="pUnit" aria-label="Answer units"><option value="in">Inch</option><option value="mm">Metric</option></select>
+        <input type="text" id="guess" inputmode="decimal" autocomplete="off" placeholder="0.000" aria-label="Your reading">
+        <button class="primary" id="checkBtn">Check</button>
+        <button id="nextBtn">Next</button>
+        <div id="pfb" aria-live="polite"><p class="pintro">Read the gage and type the height.</p></div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div class="tut" id="tut" role="dialog" aria-modal="true" aria-labelledby="tutTitle" hidden>
+  <div class="tut-card">
+    <h3 id="tutTitle">Welcome to the height gage!</h3>
+    <p>The height gage measures how tall things are, up to 12 inches (300 mm). The granite table is your zero, and the rest is reading two scales.</p>
+    <p class="tut-mouse"><b>New to the mouse?</b> <b>Click</b> = press the left button once. <b>Drag</b> = hold it down, move, then let go. That’s all you need.</p>
+    <ol>
+      <li><b>Pick a part.</b> Choose one from “Part” on the left, then click a step. The tip lowers onto it for you.</li>
+      <li><b>Read it.</b> The last line on the tall scale below the sliding scale’s 0, plus the sliding line that lines up perfectly. Inches are on the left, millimeters on the right.</li>
+      <li><b>Check the close-up.</b> The strip above the flat view magnifies the two lines that meet, inch and metric, so you can double-check yourself.</li>
+      <li><b>See where it’s measuring.</b> The green dot at the bottom left tints the face the tip is on. Turn it off for a plain part.</li>
+      <li><b>Turn on the colors.</b> The colored dots at the bottom left start off. Tap one and its piece of the reading lights up on the tool. Tap it again to hide it.</li>
+      <li><b>Jump to a size.</b> Type into the “Go to” box at the bottom left and press Go. Add “in” or “mm” (like “3.742 in” or “95 mm”) and it knows which you mean.</li>
+      <li><b>Zoom the flat view.</b> The box in the corner shows the scales flat. The expand button makes it full height; the eye hides it.</li>
+      <li><b>Clear or real?</b> Markings start on plain, easy-to-read metal. The gem button at the top right brings back the real machined finish.</li>
+      <li><b>Practice.</b> Click “Practice,” type what you read, then “Check.” Slip up? No stress. It shows exactly which step went wrong, and why.</li>
+    </ol>
+    <div class="row"><button class="primary" id="tutClose">Let’s measure!</button></div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/js/all.min.js"><\/script>
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"
+} }
+<\/script>
+<script src="js/height.js"><\/script>
+<script src="js/color-dots.js"><\/script>
+<script src="js/dropdowns.js"><\/script>
+
+</body>
+</html>
+</script>
+<script src="js/shell.js"></script>
+</body>
+</html>
