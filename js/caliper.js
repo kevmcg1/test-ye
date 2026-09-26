@@ -557,7 +557,9 @@ const bezel = new THREE.Group(); dial.add(bezel);
 // needle
 const needle = new THREE.Group(); dial.add(needle);
 (function buildNeedle() {
-  const s = shapeFrom([[0, 0.635], [0.011, 0.1], [0.024, 0], [0.018, -0.3], [-0.018, -0.3], [-0.024, 0], [-0.011, 0.1]]);
+  // same width as a 0.001" mark on the face (0.005)
+  const w = 0.0025;
+  const s = shapeFrom([[w, 0.635], [w, -0.3], [-w, -0.3], [-w, 0.635]]);
   const g = new THREE.ExtrudeGeometry(s, { depth: 0.006, bevelEnabled: false });
   g.translate(0, 0, 0.47);
   needle.add(mesh(g, blackGloss));
@@ -1104,6 +1106,9 @@ const TOOL = {
 // the vernier has no bezel: its zero is engraved, so the offset only exists on the dial caliper
 function bezelOffset() { if (isVern()) return 0; const b = state.bezel / TAU * 0.1; return b - 0.1 * Math.round(b / 0.1); }
 const indicated = () => state.pos + bezelOffset();
+// the dial caliper's needle only rests on thou marks: the slider position that puts it on the mark
+// nearest the true reading, measured against the face so it still lands on a mark when the bezel is turned
+const needlePos = () => isVern() ? state.pos : Math.round(indicated() * 1000) / 1000 - bezelOffset();
 // split a reading in thousandths into what the scales show.
 // dial: inch + tenth + dial.  vernier: inch + tenth + sub (0.025″ lines past the tenth) + vern.
 // the vernier caliper reads metric when millimeters are picked: the top scale and the top plate
@@ -2104,9 +2109,9 @@ function drawFlat() {
     seg(x0, y0, x1, y1, isD ? 3 : i % 10 === 0 ? 1.8 : 1, isD ? HLC.dial : '#111');
   }
   for (let v = 0; v < 100; v += 10) { const [x, y] = at(v, R - 26); txt(String(v), x, y, 11, '#111'); }
-  // needle angle comes from the true slider position; the face turns with the bezel
-  const nAng = ((state.pos / 0.1) % 1) * TAU;
-  g.strokeStyle = '#0c0c0d'; g.lineWidth = 2.6; g.lineCap = 'round';
+  // needle sits on the thou mark nearest the true slider position; the face turns with the bezel
+  const nAng = ((needlePos() / 0.1) % 1) * TAU;
+  g.strokeStyle = '#0c0c0d'; g.lineWidth = 1; g.lineCap = 'round'; // same width as a 0.001" mark
   g.beginPath(); g.moveTo(cx - (R - 50) * Math.sin(nAng), cy + (R - 50) * Math.cos(nAng)); g.lineTo(cx + (R - 8) * Math.sin(nAng), cy - (R - 8) * Math.cos(nAng)); g.stroke();
   g.lineCap = 'butt';
   g.fillStyle = '#0c0c0d'; g.beginPath(); g.arc(cx, cy, 5, 0, TAU); g.fill();
@@ -2646,7 +2651,7 @@ function vizDial(A, Y) {
     // numbers sit above the marks, outside the ring
     if (m % 5 === 0 || hot) v.text(m, px(R + 13), py(R + 13), { col, size: hot ? 12.5 : 10, weight: hot ? 700 : 600, maxShift: 10, alts: [[0, -6]] });
   }
-  v.line(cx, H, cx, top + 6, '#0c0c0d', 4);
+  v.line(cx, H, cx, top + 6, '#0c0c0d', 1.2); // same width as a mark
   v.circle(cx, top + 6, 2.5, `fill="${VZ.ok}"`);
   v.text('Needle', cx - 12, H - 10, { anchor: 'end', size: 9, col: VZ.mute, alts: [[-20, 0], [24 + 12 * 2, 0]] });
   if (Y && !yVisible) v.text(`Yours: mark ${Y.dial}`, W - 8, H - 10, { anchor: 'end', size: 10, col: VZ.bad, alts: [[0, -16]] });
@@ -3149,7 +3154,7 @@ function loop(now) {
   const dt = Math.min(0.05, clock.getDelta());
   stepAnim(dt);
   slider.position.x = state.pos;
-  needle.rotation.z = -TAU * state.pos / 0.1;
+  needle.rotation.z = -TAU * needlePos() / 0.1;
   wheel.rotation.z = state.pos / WHEEL_R;
   bezel.rotation.z = state.bezel;
   lockTopKnob.rotation.y += (knobAnim.top - lockTopKnob.rotation.y) * 0.15;
